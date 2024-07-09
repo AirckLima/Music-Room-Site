@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Monomaniac_One } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const monomaniac = Monomaniac_One({ weight: "400", subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,9 +16,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={ inter.className }>
+      <body className={ monomaniac.className }>
         { children }
-      <footer className="w-full h-[10vh] bg-slate-400 rounded-t-xl">
+        <footer className="w-full h-[10vh] bg-slate-400 rounded-t-xl">
         </footer>
       </body>
     </html>
