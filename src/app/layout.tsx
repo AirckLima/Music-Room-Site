@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={ ` ${monomaniac.className} bg-slate-50 dark:bg-slate-950 from-slate-50 dark:from-slate-950 bg-gradient-to-b to-slate-400 dark:to-slate-800 ` } suppressHydrationWarning>
+      <body className={ ` ${monomaniac.className} bg-slate-50 dark:bg-slate-950 from-slate-50 dark:from-slate-950 bg-gradient-to-b to-slate-200 dark:to-slate-800 ` } suppressHydrationWarning>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
