@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
-import { Monomaniac_One } from "next/font/google";
+import { Rubik } from "next/font/google";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import MobileMenu from "@/components/MobileMenu";
-import "./globals.css";
-import Header from "@/components/Header";
+import "@/app/globals.css";
 
-const monomaniac = Monomaniac_One({ weight: "400", subsets: ["latin"] });
+const monomaniac = Rubik({ weight: "400", subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -26,7 +25,6 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Header />
           <div className="">
             { children }
           </div>
