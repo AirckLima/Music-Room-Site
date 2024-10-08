@@ -1,24 +1,105 @@
-import { Library as LibraryIcon } from "lucide-react";
+"use client";
+import { Library as LibraryIcon, Square, Grid2X2, Grid3X3, icons } from "lucide-react";
 import Link from "next/link";
 import React from "react";
+import { useState, useCallback, useContext, createContext, useMemo } from "react";
+import { Separator } from "@/components/ui/separator";
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import "@/app/globals.css";
+export enum sizeOptions {
+    SMALL = 3,
+    MEDIUM = 2,
+    LARGE = 1,
+}
+
+type LibraryContextProps = {
+    itemsSize: sizeOptions;
+    setSize: (size: number) => void;
+};
+
+
+export const LibraryContext = createContext<LibraryContextProps>({ itemsSize: sizeOptions.MEDIUM, setSize: () => { } });
 
 
 export function Library({ children }: { children?: React.ReactNode; }) {
+
+    const [itemsSize, setItemSize] = useState<sizeOptions>(sizeOptions.MEDIUM);
+
+    const setSize = useCallback((size: sizeOptions) => {
+        setItemSize(size);
+    }, []);
+
     return (
         <div className="flex flex-col w-full">
-            { children }
+            <LibraryContext.Provider value={ { itemsSize, setSize } }>
+                <LibraryMenu />
+                <Separator className="mt-1 mb-3" decorative={ true } />
+                { children }
+            </LibraryContext.Provider>
+        </div>
+    );
+}
+
+
+export function LibraryMenu() {
+    const { itemsSize, setSize } = useContext(LibraryContext);
+
+    const icon = useMemo(() => {
+        return {
+            1: <Square className="size-7" />,
+            2: <Grid2X2 className="size-7" />,
+            3: <Grid3X3 className="size-7" />
+        };
+    }, []);
+
+    console.log(itemsSize);
+
+
+    return (
+        <div className="flex flex-row justify-center w-full h-7 bg-slate-200">
+            <div>
+                <Popover>
+                    <PopoverTrigger asChild>
+                        <button>
+                            {
+                                icon[itemsSize]
+                            }
+                        </button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-fit">
+                        <ToggleGroup orientation="horizontal" type="single" defaultValue={`${sizeOptions.MEDIUM}`} value={ `${itemsSize}` } onValueChange={ (value: string) => { console.log(itemsSize); setSize(parseInt(value)); } }>
+                            {
+                                Object.entries(icon).map(
+                                    (opt) => <>
+                                        <ToggleGroupItem className=" data-[state=on]:bg-slate-500" key={ opt[0] } id={ `size-option-${opt[0]}` } value={ opt[0] }>
+                                            { opt[1] }
+                                        </ToggleGroupItem>
+                                    </>
+                                )
+                            }
+                        </ToggleGroup >
+                    </PopoverContent>
+                </Popover>
+            </div>
         </div>
     );
 }
 
 
 export function LibraryContent({ children }: { children?: React.ReactNode; }) {
+    const {itemsSize} = useContext(LibraryContext);
+
+    const colSize = `grid-cols-${itemsSize}`;
+
     return (
-        <div className="grid grid-cols-2 justify-items-center items-center gap-y-5 w-screen" >
+        <div className={ `grid ${colSize} justify-items-center auto-cols-fr items-center gap-y-5 w-screen` } >
             { children }
         </div>
     );
 }
+
+
 
 
 export function LibraryItem() {
@@ -38,3 +119,4 @@ export function LibraryItem() {
         </div>
     );
 }
+

@@ -102,8 +102,8 @@ export default function Home() {
             {
               [1, 2, 3, 4, 5, 6, 7, 8, 9].map((item) => <li className="list-none" key={ item }><LibraryItem /></li>)
             }
-            <div className=" odd:col-span-full even:self-start even:content-center  even:h-40  h-fit  odd:mt-5">
-              <Link href={ "/user/room" } className="flex flex-row justify-center items-center gap-2 h-full w-fit text-base underline mx-2 bg-slate-400">
+            <div className=" odd:col-span-full even:self-start flex justify-center items-center even:h-40 odd:h-16 w-full odd:mt-5 group">
+              <Link href={ "/user/room" } className="flex flex-row justify-center items-center gap-2  group-even:h-1/2 h-full w-[50%] text-base underline mx-2 bg-slate-400 rounded-md">
                 Add
                 <LibraryIcon className="size-5" />
               </Link>
