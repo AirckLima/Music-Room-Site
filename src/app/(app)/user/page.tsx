@@ -47,7 +47,7 @@ export default function Home() {
           <p className="text-2xl  mb-3">What to listen next:</p>
 
           <div className="">
-            <Carousel className="bg-slate-300" opts={ { dragFree: true } } >
+            <Carousel className="" opts={ { dragFree: true } } >
               <CarouselContent className="gap-4">
                 <CarouselItem key={ 1 } className="basis-auto">
                   <a href="user/album" className="size-48 flex flex-col h-full">
@@ -100,7 +100,7 @@ export default function Home() {
         <Library>
           <LibraryContent>
             {
-              [1, 2, 3, 4, 5, 6, 7, 8, 9].map((item) => <li className="list-none" key={ item }><LibraryItem /></li>)
+              [1, 2, 3, 4, 5, 6, 7, 8, 9].map((item) => <li className="list-none w-full" key={ item }><LibraryItem /></li>)
             }
             <div className=" odd:col-span-full even:self-start flex justify-center items-center even:h-40 odd:h-16 w-full odd:mt-5 group">
               <Link href={ "/user/room" } className="flex flex-row justify-center items-center gap-2  group-even:h-1/2 h-full w-[50%] text-base underline mx-2 bg-slate-400 rounded-md">
