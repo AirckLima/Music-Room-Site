@@ -6,14 +6,15 @@ import { useState, useCallback, useContext, createContext, useMemo } from "react
 import { Separator } from "@/components/ui/separator";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/library-radio-group";
 import "@/app/globals.css";
 
 
 
 export enum sizeOptions {
-    SMALL = 3,
+    SMALL = 1,
     MEDIUM = 2,
-    LARGE = 1,
+    LARGE = 3,
 }
 
 
@@ -51,9 +52,9 @@ export function LibraryMenu() {
 
     const icon = useMemo(() => {
         return {
-            1: <Square className="size-7" key={ 1 } />,
-            2: <Grid2X2 className="size-7" key={ 2 } />,
-            3: <Grid3X3 className="size-7" key={ 3 } />
+            3: <Square className="size-7 stroke-slate-700 group-data-[state=checked]:stroke-slate-900 transition duration-200 group-data-[state=checked]:scale-110  " key={ 1 } />,
+            2: <Grid2X2 className="size-7 stroke-slate-700 group-data-[state=checked]:stroke-slate-900 transition duration-200 group-data-[state=checked]:scale-110  " key={ 2 } />,
+            1: <Grid3X3 className="size-7 stroke-slate-700 group-data-[state=checked]:stroke-slate-900 transition duration-200 group-data-[state=checked]:scale-110  " key={ 3 } />
         };
     }, []);
 
@@ -70,22 +71,24 @@ export function LibraryMenu() {
                         </button>
                     </PopoverTrigger>
                     <PopoverContent className="w-fit">
-                        <ToggleGroup orientation="horizontal" type="single"
+                        <RadioGroup orientation="horizontal"
                             defaultValue={ `${sizeOptions.MEDIUM}` } value={ `${itemsSize}` }
                             onValueChange={ (value: string) => setSize(parseInt(value)) }
                         >
                             {
                                 Object.entries(icon).map(
                                     (opt) => {
-                                        return (<li key={ opt[0] } className="list-none">
-                                            <ToggleGroupItem className=" data-[state=on]:bg-slate-500" id={ `size-option-${opt[0]}` } value={ opt[0] }>
-                                                { opt[1] }
-                                            </ToggleGroupItem>
-                                        </li>);
+                                        return (
+                                            <li key={ opt[0] } className="list-none">
+                                                <RadioGroupItem className="group data-[state=checked]:bg-slate-200 p-1" id={ `size-option-${opt[0]}` } value={ opt[0] }>
+                                                    { opt[1] }
+                                                </RadioGroupItem>
+                                            </li>
+                                        );
                                     }
                                 )
                             }
-                        </ToggleGroup >
+                        </RadioGroup >
                     </PopoverContent>
                 </Popover>
             </div>
@@ -97,6 +100,8 @@ export function LibraryMenu() {
 export function LibraryContent({ children }: { children?: React.ReactNode; }) {
     const { itemsSize } = useContext(LibraryContext);
 
+    const itemCount = React.Children.count(children);
+
     const sizeMapper = {
         xs: 1,
         sm: 2,
@@ -104,17 +109,16 @@ export function LibraryContent({ children }: { children?: React.ReactNode; }) {
         lg: 4,
         xl: 5
     };
+    const clamp = (val: number, min: number, max: number) => Math.max(min, Math.min(val, max));
 
-    const a = `grid-cols-${itemsSize} sm:grid-cols-${itemsSize + sizeMapper.sm} md:grid-cols-${itemsSize + sizeMapper.md} lg:grid-cols-${itemsSize + sizeMapper.lg} xl:grid-cols-${itemsSize + sizeMapper.xl} `
+    const gridCols = `grid-cols-${itemsSize} sm:grid-cols-${itemsSize + sizeMapper.sm} md:grid-cols-${itemsSize + sizeMapper.md} lg:grid-cols-${itemsSize + sizeMapper.lg} xl:grid-cols-${itemsSize + sizeMapper.xl} `;
 
     return (
-        <div className={ `grid ${a} auto-cols-[1fr] gap-x-5 gap-y-3 items-center justify-items-center w-full h-fit` }>
+        <div className={ `grid  gap-x-3 gap-y-3 items-center justify-items-center w-full h-fit` } data-length={ itemCount } style={ { gridTemplateColumns: `repeat(auto-fill,minmax(${80 * itemsSize}px, 1fr))` } }>
             { children }
         </div>
     );
 }
-
-
 
 
 export function LibraryItem() {

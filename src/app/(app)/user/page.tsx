@@ -5,6 +5,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { Library, LibraryContent, LibraryItem } from "@/components/Library";
 
 export default function Home() {
+  const items = [1, 2, 3, 4, 5, 6, 7, 8, 9]
   return (
     <main className="grid grid-cols-1 gap-5 auto-cols-min min-h-screen   my-4 ">
 
@@ -100,9 +101,9 @@ export default function Home() {
         <Library>
           <LibraryContent>
             {
-              [1, 2, 3, 4, 5, 6, 7, 8, 9].map((item) => <li className="list-none w-full" key={ item }><LibraryItem /></li>)
+              items.map((item) => <li className="list-none w-full" key={ item }><LibraryItem /></li>)
             }
-            <div className=" odd:col-span-full even:self-start flex justify-center items-center even:h-40 odd:h-16 w-full odd:mt-5 group">
+            <div className={` col-auto even:self-start flex justify-center items-center even:h-40 odd:h-16 w-full odd:mt-5 group`}>
               <Link href={ "/user/room" } className="flex flex-row justify-center items-center gap-2  group-even:h-1/2 h-full w-[50%] text-base underline mx-2 bg-slate-400 rounded-md">
                 Add
                 <LibraryIcon className="size-5" />
