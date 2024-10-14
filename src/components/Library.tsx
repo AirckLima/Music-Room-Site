@@ -7,9 +7,8 @@ import { Separator } from "@/components/ui/separator";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/library-radio-group";
+import { WindowContext, getWindowTag, windowTags } from "@/utils/getWindowMeasure";
 import "@/app/globals.css";
-
-
 
 export enum sizeOptions {
     SMALL = 1,
@@ -28,6 +27,8 @@ export const LibraryContext = createContext<LibraryContextProps>({ itemsSize: si
 
 
 export function Library({ children }: { children?: React.ReactNode; }) {
+    const test = window.outerWidth;
+    const [windowTag, setterWindowTag] = useState<windowTags>(getWindowTag(test));
 
     const [itemsSize, setItemSize] = useState<sizeOptions>(sizeOptions.MEDIUM);
 
@@ -37,11 +38,15 @@ export function Library({ children }: { children?: React.ReactNode; }) {
 
     return (
         <div className="flex flex-col w-full px-3">
-            <LibraryContext.Provider value={ { itemsSize, setSize } }>
-                <LibraryMenu />
-                <Separator className="mt-1 mb-3" decorative={ true } />
-                { children }
-            </LibraryContext.Provider>
+            <WindowContext.Provider value={ { windowWidth: test, windowTag, setWindowTag: setterWindowTag } }>
+
+                <LibraryContext.Provider value={ { itemsSize, setSize } }>
+                    <LibraryMenu />
+                    <Separator className="mt-1 mb-3" decorative={ true } />
+                    { children }
+                </LibraryContext.Provider>
+            </WindowContext.Provider>
+
         </div>
     );
 }
@@ -49,6 +54,8 @@ export function Library({ children }: { children?: React.ReactNode; }) {
 
 export function LibraryMenu() {
     const { itemsSize, setSize } = useContext(LibraryContext);
+    const { windowWidth, windowTag, setWindowTag } = useContext(WindowContext);
+
 
     const icon = useMemo(() => {
         return {
@@ -73,7 +80,7 @@ export function LibraryMenu() {
                     <PopoverContent className="w-fit">
                         <RadioGroup orientation="horizontal"
                             defaultValue={ `${sizeOptions.MEDIUM}` } value={ `${itemsSize}` }
-                            onValueChange={ (value: string) => setSize(parseInt(value)) }
+                            onValueChange={ (value: string) => { setSize(parseInt(value)); console.log(windowTag); } }
                         >
                             {
                                 Object.entries(icon).map(
@@ -98,37 +105,51 @@ export function LibraryMenu() {
 
 
 export function LibraryContent({ children }: { children?: React.ReactNode; }) {
-    const { itemsSize } = useContext(LibraryContext);
 
-    const itemCount = React.Children.count(children);
-
+    const childrenCount = React.Children.count(children);
     const sizeMapper = {
-        xs: 1,
-        sm: 2,
-        md: 3,
-        lg: 4,
-        xl: 5
+        xs: [1, 2],
+        sm: 1,
+        md: 2,
+        lg: 2,
+        xl: 3
     };
+
+
+    const { itemsSize } = useContext(LibraryContext);
+    const { windowWidth, windowTag, setWindowTag } = useContext(WindowContext);
+
+
+    useEffect(() => {
+        const handleResize = () => { setWindowTag(getWindowTag(window.outerWidth)); };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => window.removeEventListener('resize', handleResize);
+    });
+
+
     const clamp = (val: number, min: number, max: number) => Math.max(min, Math.min(val, max));
 
-    const gridCols = `grid-cols-${itemsSize} sm:grid-cols-${itemsSize + sizeMapper.sm} md:grid-cols-${itemsSize + sizeMapper.md} lg:grid-cols-${itemsSize + sizeMapper.lg} xl:grid-cols-${itemsSize + sizeMapper.xl} `;
+
+
 
     return (
-        <div className={ `grid  gap-x-3 gap-y-3 items-center justify-items-center w-full h-fit` } data-length={ itemCount } style={ { gridTemplateColumns: `repeat(auto-fill,minmax(${80 * itemsSize}px, 1fr))` } }>
+        <div className={ `grid  gap-x-3 gap-y-3 items-center justify-items-center w-full h-fit` } style={ { gridTemplateColumns: `repeat(auto-fill,minmax(${80 * itemsSize}px, 1fr))` } }>
             { children }
         </div>
     );
 }
 
 
-export function LibraryItem() {
+export function LibraryItem({ data }: { data: albumResponse; }) {
     return (
         <div className="flex flex-col items-center justify-center h-fit">
-            <Link href={ `/album/${1}` } className="block w-full aspect-square bg-teal-600 rounded-md "></Link>
+            <Link href={ `/album/${data.id}` } className="block w-full aspect-square bg-teal-600 rounded-md "></Link>
             <div className="text-sm w-full">
-                <p className="truncate text-base font-bold">album title</p>
-                <p className="truncate">album band</p>
-                <div className="flex flex-row gap-2 w-full overflow-hidden ">
+                <p className="truncate text-base font-bold">{ data.name }</p>
+                <p className="truncate">{ data.bands?.map((band: bandResponse) => (<span key={ band.id }>{ band.name }</span>)) }</p>
+                <div className="flex flex-row gap-2 w-full overflow-hidden">
                     <span className="whitespace-nowrap">album genre</span>
                     <span className="whitespace-nowrap">album genre</span>
                     <span className="whitespace-nowrap">album genre</span>

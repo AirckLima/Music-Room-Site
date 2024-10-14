@@ -1,22 +1,43 @@
-'use client'
-export function getWindowMeasure() {
-  const windowWidth = window.innerWidth;
+"use client";
 
-  const viewportWidthMapper = {
-    xs: [0, 640],
-    sm: [640, 768],
-    md: [768, 1024],
-    lg: [1024, 1280],
-    xl: [1280, 1536],
-  };
+import { useContext, createContext } from "react";
 
-  type key = keyof typeof viewportWidthMapper 
+export type windowTags = "xl" | "lg" | "md" | "sm" | "xs";
 
-  const value = Object.entries(viewportWidthMapper).find(
-    (val, ind) => windowWidth < val[1][1] && windowWidth > val[1][0]
-  );
+export type LibraryContextProps = {
+  windowWidth: number;
+  windowTag: windowTags;
+  setWindowTag: (tag: windowTags) => void;
+};
 
-  const result: key | null = value ? value[0] as key : null;
+export const viewportWidthMapper = {
+  "1535": "xl",
+  "1279": "lg",
+  "1023": "md",
+  "767": "sm",
+  "639": "xs",
+};
 
-  return result
+export function getWindowTag(x: number): windowTags {
+  for (const key in viewportWidthMapper) {
+    const val: windowTags = viewportWidthMapper[
+      key as keyof typeof viewportWidthMapper
+    ] as windowTags;
+
+    if (x <= parseInt(key)) return val;
+  }
+
+  return "xs";
 }
+
+export const WindowContextDefaultValues = {
+  windowWidth: 320,
+  windowTag: "xs" as windowTags,
+  setWindowTag: (tag: windowTags) => {
+    return;
+  },
+};
+
+export const WindowContext = createContext<LibraryContextProps>(
+  WindowContextDefaultValues
+);

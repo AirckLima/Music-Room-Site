@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Rubik } from "next/font/google";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import MobileMenu from "@/components/MobileMenu";
+
 import "@/app/globals.css";
 
 const monomaniac = Rubik({ weight: "400", subsets: ["latin"] });
@@ -25,12 +26,12 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="">
-            { children }
-          </div>
-          <MobileMenu />
-          <footer className="w-full h-[10vh]  bg-slate-50 dark:bg-slate-950 rounded-t-lg ">
-          </footer>
+            <div className="">
+              { children }
+            </div>
+            <MobileMenu />
+            <footer className="w-full h-[10vh]  bg-slate-50 dark:bg-slate-950 rounded-t-lg ">
+            </footer>
         </ThemeProvider>
       </body>
     </html>
