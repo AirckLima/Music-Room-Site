@@ -1,5 +1,3 @@
-"use client";
-
 import { useContext, createContext } from "react";
 
 export type windowTags = "xl" | "lg" | "md" | "sm" | "xs";
@@ -27,7 +25,7 @@ export function getWindowTag(x: number): windowTags {
     if (x <= parseInt(key)) return val;
   }
 
-  return "xs";
+  return "xl";
 }
 
 export const WindowContextDefaultValues = {
