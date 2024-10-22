@@ -114,6 +114,19 @@ export function LibraryMenu() {
             <div>
                 <Popover>
                     <PopoverTrigger asChild>
+                        <button className=" transition duration-200 data-[state=open]:border data-[state=open]:scale-125 data-[state-open]:bg-slate-300  rounded-full">
+                            <Search className="size-5 stroke-slate-700 " />
+                        </button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-fit">
+                        <Input className="" />
+                    </PopoverContent>
+                </Popover>
+            </div>
+
+            <div>
+                <Popover>
+                    <PopoverTrigger asChild>
                         <button>
                             {
                                 icon[itemsSize]
@@ -172,19 +185,6 @@ export function LibraryMenu() {
                             Add
                             <Plus className="size-5 shrink-0" />
                         </Button>
-                    </PopoverContent>
-                </Popover>
-            </div>
-
-            <div>
-                <Popover>
-                    <PopoverTrigger asChild>
-                        <button className=" transition duration-200 data-[state=open]:border data-[state=open]:scale-125 data-[state-open]:bg-slate-300  rounded-full">
-                            <Search className="size-5 stroke-slate-700 " />
-                        </button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-fit">
-                        <Input className="" />
                     </PopoverContent>
                 </Popover>
             </div>
